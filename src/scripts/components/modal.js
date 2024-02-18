@@ -1,26 +1,31 @@
-import {formNewPlace, formEditProfile, profileInfoTitle, profileInfoDescription, nameInput, jobInput} from '../index.js';
-
-export function popupEditPlaceholder (popupEdit) {
-nameInput.value = profileInfoTitle.textContent;
-jobInput.value = profileInfoDescription.textContent;
-openPopup(popupEdit);
-}
-
-export function openPopup (openPopup) {
-  openPopup.classList.add('popup_is-opened');
+export function openPopup (popupElement) {
+  popupElement.classList.add('popup_is-opened');
+  const popupIsOpened = document.querySelector('.popup_is-opened');
+  const popupClose = popupIsOpened.querySelector('.popup__close');
+  popupClose.addEventListener('click', function () {
+    closePopup(popupIsOpened);
+  });
+  document.addEventListener('click', handleOverlayClick);
   document.addEventListener('keydown', closePopupByEsc);
 }
 
-export function closePopup () {
-  const popupOpened = document.querySelector('.popup_is-opened');
-  popupOpened.classList.remove('popup_is-opened');
+export function closePopup (popupIsOpened) {
+  popupIsOpened.querySelector('.popup__close').removeEventListener('click', function () {
+    closePopup(popupIsOpened)
+  });
+  popupIsOpened.classList.remove('popup_is-opened');
+  document.removeEventListener('click', handleOverlayClick)
   document.removeEventListener('keydown', closePopupByEsc);
-  formNewPlace.reset();
 }
 
-export function closePopupByEsc (evt) {
+function closePopupByEsc (evt) {
   if (evt.key === 'Escape') {
-    formEditProfile.reset()
-    closePopup();
+    closePopup(document.querySelector('.popup_is-opened'));
+  }
+}
+
+function handleOverlayClick (evt) {
+  if (evt.target.classList.contains("popup")) {
+    closePopup(document.querySelector('.popup_is-opened'));
   }
 }
