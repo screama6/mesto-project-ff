@@ -21,11 +21,6 @@ export function createCard (placeValue, linkValue, cardTemplate, clickImageCallb
   return cardElement
 }
 
-export const createnewCard = (nameValue, linkValue, cardTemplate, handleClickImage, placesList) => {
-  const newCard = createCard(nameValue, linkValue, cardTemplate, handleClickImage, toggleLike, deleteCard);
-  placesList.prepend(newCard);
-}
-
 export function toggleLike (evt) {
   evt.target.classList.toggle('card__like-button_is-active');
 }

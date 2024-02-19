@@ -1,20 +1,10 @@
 export function openPopup (popupElement) {
   popupElement.classList.add('popup_is-opened');
-  const popupIsOpened = document.querySelector('.popup_is-opened');
-  const popupClose = popupIsOpened.querySelector('.popup__close');
-  popupClose.addEventListener('click', function () {
-    closePopup(popupIsOpened);
-  });
-  document.addEventListener('click', handleOverlayClick);
   document.addEventListener('keydown', closePopupByEsc);
 }
 
-export function closePopup (popupIsOpened) {
-  popupIsOpened.querySelector('.popup__close').removeEventListener('click', function () {
-    closePopup(popupIsOpened)
-  });
-  popupIsOpened.classList.remove('popup_is-opened');
-  document.removeEventListener('click', handleOverlayClick)
+export function closePopup (popupOpen) {
+  popupOpen.classList.remove('popup_is-opened');
   document.removeEventListener('keydown', closePopupByEsc);
 }
 
@@ -24,8 +14,9 @@ function closePopupByEsc (evt) {
   }
 }
 
-function handleOverlayClick (evt) {
+export function handleOverlayClick (evt) {
   if (evt.target.classList.contains("popup")) {
-    closePopup(document.querySelector('.popup_is-opened'));
+    closePopup(evt.target);
   }
+  
 }

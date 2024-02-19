@@ -1,7 +1,7 @@
 import '../pages/index.css';
 import {initialCards} from './components/cards.js';
-import {createCard, createnewCard, toggleLike, deleteCard} from './components/card.js';
-import {openPopup, closePopup} from './components/modal.js';
+import {createCard, toggleLike, deleteCard} from './components/card.js';
+import {openPopup, closePopup, handleOverlayClick} from './components/modal.js';
 
 const cardTemplate = document.querySelector('#card-template').content;
 const placesList = document.querySelector('.places__list');
@@ -33,15 +33,19 @@ const linkPlace = formNewPlace.elements.link;
 formEditProfile.addEventListener('submit', function (evt) {
   evt.preventDefault();
   editProfileFormSubmit(nameInput.value, jobInput.value);
-  closePopup(document.querySelector('.popup_is-opened'));
+  closePopup(popupEdit);
 });
 
 formNewPlace.addEventListener('submit', function (evt){
   evt.preventDefault();
   createnewCard(namePlace.value, linkPlace.value, cardTemplate, handleClickImage, placesList);
-  formNewPlace.reset();
-  closePopup(document.querySelector('.popup_is-opened'));
+  closePopup(popupNewCard);
 });
+
+const createnewCard = (nameValue, linkValue) => {
+  const newCard = createCard(nameValue, linkValue, cardTemplate, handleClickImage, toggleLike, deleteCard);
+  placesList.prepend(newCard);
+}
 
 function handleClickImage (imageSrc, imageTitle) {
   popupImageContent.src = imageSrc;
@@ -55,14 +59,19 @@ function editProfileFormSubmit(nameInput, jobInput) {
   profileDescription.textContent = jobInput;
 }
 
-function popupEditPlaceholder (evt) {
+function popupEditPlaceholder () {
   nameInput.value = profileInfoTitle.textContent;
   jobInput.value = profileInfoDescription.textContent;
-  openPopup(evt);
+  openPopup(popupEdit);
   }
 
 popupList.forEach((element) => {
   element.classList.add('popup_is-animated');
+  const popupClose = element.querySelector('.popup__close');
+  popupClose.addEventListener('click', function () {
+    closePopup(element);
+  });
+  element.addEventListener('click', handleOverlayClick);
 });
 
 initialCards.forEach((element) => {
