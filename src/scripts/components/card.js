@@ -1,7 +1,7 @@
 import {deleteCards, deleteLike, doesLike} from "./api.js"; 
-import {openPopup, closePopup, handleOverlayClick} from './modal.js';
+import {openPopup, closePopup} from './modal.js';
 
-export function createCard (placeValue, linkValue, profileId, ownerProfileId, cardId, cardLikes, cardTemplate, clickImageCallback) {
+export function createCard (dataCreateCard, cardTemplate, clickImageCallback) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
   const cardTitle = cardElement.querySelector('.card__title');
@@ -12,19 +12,19 @@ export function createCard (placeValue, linkValue, profileId, ownerProfileId, ca
   const popupDeleteCard = document.querySelector('.popup_type_delete-card');
   const formDeleteCard = document.forms['delete-card'];
   
-  cardImage.src = linkValue;
-  cardImage.alt = placeValue;
-  cardTitle.textContent = placeValue;
-  likesText.textContent = cardLikes.length;
+  cardImage.src = dataCreateCard.link;
+  cardImage.alt = dataCreateCard.name;
+  cardTitle.textContent = dataCreateCard.name;
+  likesText.textContent = dataCreateCard.cardLikes.length;
 
-  if (profileId === ownerProfileId) {
+  if (dataCreateCard.userId === dataCreateCard.ownerProfileId) {
     cardDeleteButton.addEventListener('click', function (cardDeleteButton) {
       const listItem = cardDeleteButton.target.closest('.places__item');
       formDeleteCard.reset();
       openPopup(popupDeleteCard);
       formDeleteCard.addEventListener('submit', function (evt) {
         evt.preventDefault();
-        deleteCards(cardId);
+        deleteCards(dataCreateCard.cardId);
         deleteCard(listItem);
         closePopup(popupDeleteCard);
       }, { once: true })
@@ -35,8 +35,8 @@ export function createCard (placeValue, linkValue, profileId, ownerProfileId, ca
     cardDeleteButton.remove()
   }
   
-  cardLikes.forEach ((evt) => {
-    if (profileId === evt._id) {
+  dataCreateCard.cardLikes.forEach ((evt) => {
+    if (dataCreateCard.userId === evt._id) {
       likeButton.classList.add('card__like-button_is-active')
       
     } 
@@ -44,11 +44,11 @@ export function createCard (placeValue, linkValue, profileId, ownerProfileId, ca
 
   likeButton.addEventListener('click', function (like) {
     const likes = like.target
-    toggleLike(likes, cardId, likesText)
+    toggleLike(likes, dataCreateCard.cardId, likesText)
   });
 
   cardImage.addEventListener('click', function () {
-    clickImageCallback(linkValue, placeValue);
+    clickImageCallback(dataCreateCard.link,dataCreateCard.name);
   });
 
   return cardElement

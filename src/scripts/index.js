@@ -65,7 +65,15 @@ formNewPlace.addEventListener('submit', function (evt){
   evt.preventDefault();
   renderLoading(evt.submitter, true);
   addCards(namePlace.value, linkPlace.value).then((input) => {
-    createnewCard(input.name, input.link, input.owner._id, input._id, input.likes);
+    const dataCreateCard = {
+      name: input.name,
+      link: input.link,
+      userId: userId,
+      ownerProfileId: input.owner._id,
+      cardId: input._id,
+      cardLikes: input.likes
+    }
+    createnewCard(dataCreateCard);
     closePopup(popupNewCard);
   })
   .catch((err) => {
@@ -91,8 +99,8 @@ formEditAvatar.addEventListener('submit', function (evt){
   }); 
 });
 
-const createnewCard = (nameValue, linkValue, ownerProfileId, cardID, cardLikes) => {
-  const newCard = createCard(nameValue, linkValue, userId, ownerProfileId, cardID, cardLikes, cardTemplate, handleClickImage);
+const createnewCard = (dataCreateCard) => {
+  const newCard = createCard(dataCreateCard, cardTemplate, handleClickImage);
   placesList.prepend(newCard);
 }
 
@@ -144,18 +152,26 @@ popupList.forEach((element) => {
 
 getData().then(res => {
   const [getProfile, getInitialCards] = res;
+  userId = getProfile._id
   getInitialCards.forEach ((element) => {
-    renderCard(element.name, element.link, getProfile._id, element.owner._id, element._id, element.likes);
+    const dataCreateCard = {
+      name: element.name,
+      link: element.link,
+      userId: userId,
+      ownerProfileId: element.owner._id,
+      cardId: element._id,
+      cardLikes: element.likes
+    }
+    renderCard(dataCreateCard);
   })
   dataProfile(getProfile.name, getProfile.about, getProfile.avatar)
-  userId = getProfile._id
 })
 .catch((err) => {
   console.log(err);
 }); 
 
-function renderCard (placeValue, linkValue, profileId, ownerProfileId, cardId, cardLikes) {
-  const newCard = createCard(placeValue, linkValue, profileId, ownerProfileId, cardId, cardLikes, cardTemplate, handleClickImage);
+function renderCard (dataCreateCard) {
+  const newCard = createCard(dataCreateCard, cardTemplate, handleClickImage);
   placesList.append(newCard);
 }
 
