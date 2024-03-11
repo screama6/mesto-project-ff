@@ -16,9 +16,6 @@ const getProfile = () => {
     }
     return Promise.reject(`Ошибка: ${res.status}`);
   })
-  .catch((err) => {
-    console.log(err);
-  }); 
 }
 
 export const getInitialCards = () => {
@@ -31,9 +28,6 @@ export const getInitialCards = () => {
     }
     return Promise.reject(`Ошибка: ${res.status}`);
   })
-  .catch((err) => {
-    console.log(err);
-  }); 
 }
 
 export const getData = () => {
@@ -85,9 +79,6 @@ export const deleteCards = (cardId) => {
     }
     return Promise.reject(`Ошибка: ${res.status}`);
   })
-  .catch((err) => {
-    console.log(err);
-  }); 
 }
 
 export const deleteLike = (cardId) => {
@@ -101,9 +92,6 @@ export const deleteLike = (cardId) => {
     }
     return Promise.reject(`Ошибка: ${res.status}`);
   })
-  .catch((err) => {
-    console.log(err);
-  }); 
 }
 
 export const doesLike = (cardId) => {
@@ -117,9 +105,6 @@ export const doesLike = (cardId) => {
     }
     return Promise.reject(`Ошибка: ${res.status}`);
   })
-  .catch((err) => {
-    console.log(err);
-  }); 
 }
 
 export const editAvatar = (link) => {
@@ -136,7 +121,4 @@ export const editAvatar = (link) => {
     }
     return Promise.reject(`Ошибка: ${res.status}`);
   })
-  .catch((err) => {
-    console.log(err);
-  }); 
 }
